@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>San Valentín ❤️</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #ffb6c1 0%, #ffe6e6 100%);
+    background-attachment: fixed;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+h1 {
+    color: #e6005c;
+    font-size: 40px;
+    margin-top: 40px;
+}
+
+p {
+    font-size: 20px;
+    color: #333;
+    margin: 10px;
+}
+
+.contador {
+    font-size: 26px;
+    color: #e6005c;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+button {
+    background-color: #ff4d88;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+button:hover {
+    background-color: #e6005c;
+}
+
+.editor {
+    display: none;
+    background: rgba(255,255,255,0.9);
+    padding: 15px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 15px;
+}
+
+.editor input,
+.editor textarea {
+    width: 95%;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.corazon {
+    position: fixed;
+    top: -10px;
+    font-size: 24px;
+    animation: caer linear infinite;
+    pointer-events: none;
+}
+
+@keyframes caer {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@media (max-width: 600px) {
+    h1 { font-size: 32px; }
+    p { font-size: 18px; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>❤️ Felíz San Valentín ❤️</h1>
+
+<p><strong>Para mi amorcito <span id="nombre"></span></strong> 💕</p>
+<p>Cada segundo contigo vale la pena.</p>
+
+<div class="contador" id="contador"></div>
+
+<button onclick="mostrarMensaje()">💌 Mensaje sorpresa</button>
+<button onclick="pedirClave()">🔒 Editar</button>
+
+<div class="editor" id="editor">
+    <h3>✏️ Editar contenido</h3>
+    <input type="text" id="inputNombre" placeholder="Nombre">
+    <textarea id="inputMensaje" rows="3" placeholder="Mensaje sorpresa"></textarea>
+    <br>
+    <button onclick="guardarDatos()">💾 Guardar</button>
+    <button onclick="cerrarEdicion()">❌ Cerrar edición</button>
+</div>
+
+<audio autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_2c8a8e8c1f.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const CLAVE_EDITOR = "amor123";
+let mensajeSorpresa = "";
+
+function cargarDatos() {
+    const nombre = localStorage.getItem("nombre") || "Cleveni";
+    const mensaje = localStorage.getItem("mensaje") || "Te amo mucho mi niña bonita ❤️✨";
+
+    document.getElementById("nombre").innerText = nombre;
+    mensajeSorpresa = mensaje;
+
+    inputNombre.value = nombre;
+    inputMensaje.value = mensaje;
+}
+
+function guardarDatos() {
+    localStorage.setItem("nombre", inputNombre.value);
+    localStorage.setItem("mensaje", inputMensaje.value);
+    cargarDatos();
+    alert("💖 Mensaje actualizado");
+}
+
+function pedirClave() {
+    const clave = prompt("Contraseña:");
+    if (clave === CLAVE_EDITOR) {
+        editor.style.display = "block";
+    } else {
+        alert("❌ Contraseña incorrecta");
+    }
+}
+
+function cerrarEdicion() {
+    editor.style.display = "none";
+}
+
+function actualizarContador() {
+    const fechaObjetivo = new Date("February 14, 2026 00:00:00").getTime();
+    const ahora = new Date().getTime();
+    const diferencia = fechaObjetivo - ahora;
+
+    if (diferencia <= 0) {
+        contador.innerHTML = "💖 ¡HOY ES SAN VALENTÍN! 💖";
+        return;
+    }
+
+    const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+    const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+    contador.innerHTML =
+        `${dias} días 💘 ${horas} horas ⏰ ${minutos} minutos 💌 ${segundos} segundos 💖`;
+}
+
+setInterval(actualizarContador, 1000);
+actualizarContador();
+
+function mostrarMensaje() {
+    alert(mensajeSorpresa);
+}
+
+function crearCorazon() {
+    const corazon = document.createElement("div");
+    corazon.className = "corazon";
+    corazon.innerHTML = "❤️";
+    corazon.style.left = Math.random() * 100 + "vw";
+    corazon.style.animationDuration = (Math.random() * 3 + 2) + "s";
+    document.body.appendChild(corazon);
+    setTimeout(() => corazon.remove(), 5000);
+}
+
+setInterval(crearCorazon, 300);
+cargarDatos();
+</script>
+
+</body>
+</html>
